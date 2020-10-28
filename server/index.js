@@ -1,6 +1,6 @@
 //#const app = require('express')();
 const express = require('express');
-const users = require('../users.json');
+const ctrl = require('./controller')
 
 const app = express();
 const port = 4338;
@@ -9,26 +9,11 @@ app.use(express.json())
 
 //# axis.get('/api/users?name=steven')
 
-app.get('/api/users', (req, res) => {
-    res.status(200).send(users)
-})
-
-app.get('/api/users/:id', (req, res) => {
-    //# req.params.id
-    const {id} = req.params;
-
-    if(!id){
-        return res.status(404).send('Unable to find resource');
-    }
-
-    const findUser = users.find(user => user.id === +id);
-
-    if(!foundUser) {
-        return res.status(500).send('Unable to find user');
-    }
-
-    res.status(200).send(foundUser);
-})
+app.get('/api/users', ctrl.getUsers);
+app.get('/api/users/:id', ctrl.getOneUser);
+app.post('/api/users', ctrl.createUser);
+app.put('/api/users/:id', ctrl.updateUser);
+app.delete('/api/users/:id', ctrl.deleteUser);
 
 
 // //# query - sends data without required end point
